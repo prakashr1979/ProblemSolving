@@ -1,0 +1,78 @@
+using System;
+using System.Collections.Generic;
+class MainClass {
+  public static void Main (string[] args) {
+    Console.WriteLine ("Hello World");
+    string inputstr="01|123456789102|12345.00|12345.25|Pra1234567Pra1234567|Pra1234567Pra1234567|Cit1234567City10705402|12345.00|12345.25|Ram1234567Pra1234567|Ram1234567Pra1234567|Cit1234567City10705403|123456789101|123456787702|12345.00|12345.25|Toy1234567Pra1234567|Toy1234567Pra1234567|OND1234567TNJy10705403|1234567877";
+    string stringToRead="", z="";
+    int noOfPosRead=0, idxStart=0;
+    int strLength= inputstr.Length;
+    bool isOdd=false;
+
+Disclosure obj = new Disclosure();
+List<Disclosure> disclosures = new List<Disclosure>();
+  do
+  {
+    z= inputstr.Substring(idxStart,2);
+    //Console.WriteLine ("idxStart 1 "+idxStart);
+    idxStart+=3;
+    Console.WriteLine ("z "+z);
+    isOdd = Math.Abs(Int32.Parse(z)-2)==0?false:true;
+    
+    if(isOdd)
+    {
+      noOfPosRead=10;
+    }
+    else
+    {
+      noOfPosRead=80;
+    }
+    stringToRead = inputstr.Substring(idxStart, noOfPosRead);
+    if(isOdd)
+    {
+      if(z=="01")
+      {
+        obj.Header = stringToRead;
+      }
+      if(z=="03")
+      {
+        disclosures.Add(obj);
+        obj = new Disclosure();
+      }
+    }
+    else if(!isOdd)
+    {
+      obj.Details.Add(stringToRead.Split("|"));
+     
+    }
+    idxStart+=noOfPosRead;
+    Console.WriteLine ("stringToRead "+stringToRead);
+    //Console.WriteLine ("idxStart 2 "+idxStart);
+
+  }while(strLength>idxStart);
+
+   foreach(Disclosure item in disclosures)
+   {
+     Console.WriteLine ("Header "+item.Header);
+     Console.WriteLine ("Details "+item.Details.Count);
+     foreach(string[] arrayDetail in item.Details)
+     {
+       string[]  ss = arrayDetail;
+       Console.WriteLine ("Details ->Name "+ss[3]);
+     }
+     
+   }
+}
+
+public class Disclosure
+{
+  public Disclosure()
+  {
+    Details = new List<string[]>();
+  }
+  public string Header{get;set;}
+  public List<string[]> Details{get;set;}
+}
+
+
+}
